@@ -1,12 +1,48 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base::layout(~{::section})">
 <head>
-  <meta charset="UTF-8">
-  <title>SignUp Page</title>
+    <meta charset="UTF-8">
+    <title>SignUp Page</title>
 <body>
 </head>
 <section>
-  <h1>This is Sign Up Page</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="my-card mt-1 mb-1">
+                    <img class="d-block ml-auto mr-auto" style="width:60px" src="" th:src="@{/img/account.png}" alt="">
+                    <h3 class="text-center">Sign Up Here..!</h3>
+                    <form action="" th:action="@{/do_register}" method="post">
+                        <div class="form-group">
+                            <label for="name_field">Your Name</label>
+                            <input type="text" class="form-control" id="name_field" placeholder="Enter Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email_field">Your Email Id</label>
+                            <input type="email" class="form-control" id="email_field" placeholder="Enter Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password_field">Enter Password</label>
+                            <input type="password" class="form-control" id="password_field" placeholder="Enter Password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Enter About Yourself</label>
+                            <textarea rows="3" class="form-control" placeholder="Enter something about you..">
+                            </textarea>
+                        </div>
+                        <div class="container text-center">
+                            <button type="submit" class="btn bg-primary text-white">
+                                Submit
+                            </button>
+                            <button type="reset" class="btn bg-warning text-white">
+                                Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 </body>
 </html>
