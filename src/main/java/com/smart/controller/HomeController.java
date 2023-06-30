@@ -4,9 +4,11 @@ import com.smart.dao.UserRepository;
 import com.smart.entities.User;
 import com.smart.helper.Message;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,12 +40,18 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/do_register", method = RequestMethod.POST)
-    public String userRegister(@ModelAttribute("user") User user, Model model, @RequestParam(value = "terms", defaultValue = "false") boolean terms, HttpSession session) {
+    public String userRegister(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, @RequestParam(value = "terms", defaultValue = "false") boolean terms, HttpSession session) {
         try {
             if (!terms) {
                 System.out.println("Please agree to the Terms and Conditions!");
                 throw new Exception("Please agree to the Terms and Conditions!");
             }
+
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("user", user);
+                return "signup";
+            }
+
             user.setRole("ROLE_USER");
             user.setEnabled(true);
             user.setImageUrl("default.png");

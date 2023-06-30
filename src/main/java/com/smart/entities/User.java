@@ -1,5 +1,8 @@
 package com.smart.entities;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +13,26 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @NotBlank(message = "Name field is required..!")
+    @Size(min = 2, max = 20, message = "Min 2 and Max 20 characters are required")
     private String name;
+
+    @NotBlank
+    @Email(message = "Please enter a valid e-mail address")
     @Column(unique = true)
     private String email;
+
     private String password;
+
     private String role;
+
     private boolean enabled;
+
     private String imageUrl;
+
     @Column(length = 500)
     private String about;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private List<Contact> contacts = new ArrayList<>();
 
