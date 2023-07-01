@@ -45,7 +45,9 @@ public class MyConfig {
                 .permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/signin");
+                .loginPage("/signin")
+                .loginProcessingUrl("/do_login")
+                .defaultSuccessUrl("/user/dashboard");
 
         http.authenticationProvider(authenticationProvider());
 
