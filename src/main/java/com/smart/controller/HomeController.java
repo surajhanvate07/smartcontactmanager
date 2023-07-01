@@ -24,19 +24,19 @@ public class HomeController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Model model) {
         model.addAttribute("title", "Home - Smart Contact Manager");
         return "home";
     }
 
-    @RequestMapping("/about")
+    @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String about(Model model) {
         model.addAttribute("title", "About - Smart Contact Manager");
         return "about";
     }
 
-    @RequestMapping("/signup")
+    @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String signup(Model model) {
         model.addAttribute("title", "SignUp - Smart Contact Manager");
         model.addAttribute("user", new User());
@@ -79,5 +79,12 @@ public class HomeController {
 
             return "signup";
         }
+    }
+
+    @RequestMapping(value = "/signin", method = RequestMethod.GET)
+    public String customLoginForm(Model model) {
+        model.addAttribute("title", "Login Page");
+
+        return "login";
     }
 }

@@ -44,7 +44,8 @@ public class MyConfig {
                 .requestMatchers("/**")
                 .permitAll()
                 .and()
-                .formLogin();
+                .formLogin()
+                .loginPage("/signin");
 
         http.authenticationProvider(authenticationProvider());
 
