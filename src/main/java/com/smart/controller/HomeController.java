@@ -6,6 +6,7 @@ import com.smart.helper.Message;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HomeController {
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -55,6 +59,7 @@ public class HomeController {
             user.setRole("ROLE_USER");
             user.setEnabled(true);
             user.setImageUrl("default.png");
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
             System.out.println("Terms and Conditions " + terms);
             System.out.println("USER " + user);

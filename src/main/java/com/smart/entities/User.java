@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "USER")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotBlank(message = "Name field is required..!")
     @Size(min = 2, max = 20, message = "Min 2 and Max 20 characters are required")
