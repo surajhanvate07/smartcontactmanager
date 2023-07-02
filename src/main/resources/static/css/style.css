@@ -49,16 +49,20 @@ body {
     height : 100%;
     position : fixed;
     padding-top : 45px;
+    z-index : 9999999999999999999;
 }
 .sidebar a {
     display : block;
     width : 100%;
     padding : 10px 25px;
     text-decoration : none;
-    color : gray;
+    color : #000000;
 }
 .sidebar a:hover {
-    background : #e2e2e2;
+    background : #10ac9d;
+    width : 80%;
+    margin : 0% 10%;
+    color : white;
 }
 .sidebar .divider {
     height : 0.5px;
