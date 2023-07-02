@@ -41,4 +41,18 @@ public class UserController {
 
         return "normal/add-contact-form";
     }
+
+    @RequestMapping(value = "/process-contact", method = RequestMethod.POST)
+    public String processContact(@ModelAttribute("contact") Contact contact, Principal principal) {
+        String name = principal.getName();
+
+        User loggedUser = userRepository.getUserByUserName(name);
+        contact.setUser(loggedUser);
+        loggedUser.getContacts().add(contact);
+
+        userRepository.save(loggedUser);
+
+        System.out.println("CONTACT :" +contact);
+        return "normal/add-contact-form";
+    }
 }
