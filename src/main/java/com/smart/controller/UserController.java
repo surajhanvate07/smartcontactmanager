@@ -3,6 +3,8 @@ package com.smart.controller;
 import com.smart.dao.UserRepository;
 import com.smart.entities.Contact;
 import com.smart.entities.User;
+import com.smart.helper.Message;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
@@ -51,7 +53,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/process-contact", method = RequestMethod.POST)
-    public String processContact(@ModelAttribute("contact") Contact contact, @RequestParam("profileImage") MultipartFile file, Principal principal) {
+    public String processContact(@ModelAttribute("contact") Contact contact, @RequestParam("profileImage") MultipartFile file, Principal principal, HttpSession session) {
         try {
             String name = principal.getName();
 
@@ -63,7 +65,8 @@ public class UserController {
             } else {
                 // upload the file to folder and update the name to contact
                 contact.setImage(file.getOriginalFilename());
-                File uploadFile = new ClassPathResource("static/img/avatar").getFile();
+
+                File uploadFile = new ClassPathResource("static/img").getFile();
 
                 Path path = Paths.get(uploadFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
 
@@ -74,9 +77,11 @@ public class UserController {
 
             userRepository.save(loggedUser);
 
-            System.out.println("CONTACT :" + contact);
+//            System.out.println("CONTACT :" + contact);
+            session.setAttribute("message", new Message("Your contact is added..!", "alert-success"));
         } catch (Exception e) {
             e.printStackTrace();
+            session.setAttribute("message", new Message("Something went wrong, Try again", "alert-danger"));
         }
         return "normal/add-contact-form";
     }

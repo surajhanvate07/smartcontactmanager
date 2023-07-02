@@ -21,7 +21,7 @@
                                     </div>
                                 </div>
                                 <input type="text" id="firstName" name="name" placeholder="Enter name here"
-                                       class="form-control">
+                                       class="form-control" required>
                             </div>
                             <div class="input-group mt-3">
                                 <div class="input-group-prepend">
@@ -30,7 +30,7 @@
                                     </div>
                                 </div>
                                 <input type="text" id="secondName" name="secondName" placeholder="Enter nick name here"
-                                       class="form-control">
+                                       class="form-control" required>
                             </div>
                             <div class="input-group mt-3">
                                 <div class="input-group-prepend">
@@ -39,7 +39,7 @@
                                     </div>
                                 </div>
                                 <input type="number" id="phone" name="phone" placeholder="Enter phone number here"
-                                       class="form-control">
+                                       class="form-control" min="10" required>
                             </div>
                             <div class="input-group mt-3">
                                 <div class="input-group-prepend">
@@ -48,7 +48,7 @@
                                     </div>
                                 </div>
                                 <input type="email" id="email" name="email" placeholder="Enter email here"
-                                       class="form-control">
+                                       class="form-control" required>
                             </div>
                             <div class="input-group mt-3">
                                 <div class="input-group-prepend">
@@ -57,7 +57,7 @@
                                     </div>
                                 </div>
                                 <input type="text" id="work" name="work" placeholder="Enter about your work"
-                                       class="form-control">
+                                       class="form-control" required>
                             </div>
                             <div class="form-group mt-3">
                                 <textarea name="description" id="description" rows="8"
@@ -75,6 +75,12 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#description'
+        });
+    </script>
 </section>
 </body>
 </html>
