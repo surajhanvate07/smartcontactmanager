@@ -4,12 +4,20 @@ import com.smart.dao.UserRepository;
 import com.smart.entities.Contact;
 import com.smart.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 
 @Controller
@@ -43,16 +51,33 @@ public class UserController {
     }
 
     @RequestMapping(value = "/process-contact", method = RequestMethod.POST)
-    public String processContact(@ModelAttribute("contact") Contact contact, Principal principal) {
-        String name = principal.getName();
+    public String processContact(@ModelAttribute("contact") Contact contact, @RequestParam("profileImage") MultipartFile file, Principal principal) {
+        try {
+            String name = principal.getName();
 
-        User loggedUser = userRepository.getUserByUserName(name);
-        contact.setUser(loggedUser);
-        loggedUser.getContacts().add(contact);
+            User loggedUser = userRepository.getUserByUserName(name);
 
-        userRepository.save(loggedUser);
+            // Processing and uploading file...
+            if (file.isEmpty()) {
 
-        System.out.println("CONTACT :" +contact);
+            } else {
+                // upload the file to folder and update the name to contact
+                contact.setImage(file.getOriginalFilename());
+                File uploadFile = new ClassPathResource("static/img/avatar").getFile();
+
+                Path path = Paths.get(uploadFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            }
+            contact.setUser(loggedUser);
+            loggedUser.getContacts().add(contact);
+
+            userRepository.save(loggedUser);
+
+            System.out.println("CONTACT :" + contact);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "normal/add-contact-form";
     }
 }
