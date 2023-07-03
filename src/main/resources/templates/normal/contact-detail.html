@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="normal/base::layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Detail</title>
+</head>
+<body>
+<section>
+    <div class="card ml-3 mr-3">
+        <div class="card-body">
+            <div class="container text-center">
+                <h2 class="mb-2">Showing Contact Details</h2>
+                <img style="height:125px; width:125px" th:src="@{'/img/'+${contact.image}}" alt=""  src="" class="my-profile-pic">
+                <h3 class="mt-2"><span th:text="${contact.name}"></span> ( <span th:text="${contact.secondName}"></span> )</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#ID</th>
+                        <th scope="col">SCMUSER<span th:text="${contact.cId}"></span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Email</th>
+                            <td><span th:text="${contact.email}"></span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Phone</th>
+                            <td><span th:text="${contact.phone}"></span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Work</th>
+                            <td><span th:text="${contact.work}"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="description">
+                    <th:block th:utext="${contact.description}"></th:block>
+                </div>
+                <div class="container">
+                    <button class="btn btn-dark btn-lg m-2">Update</button>
+                    <button class="btn btn-danger btn-lg">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

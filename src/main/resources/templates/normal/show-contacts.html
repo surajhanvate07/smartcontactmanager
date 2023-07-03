@@ -6,10 +6,16 @@
 </head>
 <body>
 <section>
-    <div class="card m-2">
+    <div class="card ml-2 mr-2">
         <div class="card-body">
             <h1 class="text-center">Your All Contacts</h1>
-            <table class="table">
+            <div th:if="${totalPages==0}" class="mt-4 text-center">
+                <h3 class="text-secondary">
+                    You don't have any contacts added..!
+                </h3>
+                <a th:href="@{/user/add-contact}"><button class="btn btn-info m-4">Add Contact Now</button></a>
+            </div>
+            <table th:if="${totalPages!=0}" class="table">
                 <thead>
                 <tr>
                     <th scope="col">#ID</th>
@@ -22,8 +28,15 @@
                 <tbody>
                 <tr th:each="c : ${contacts}">
                     <th scope="row" th:text="'SCMUSER_'+${c.cId}"></th>
-                    <td th:text="${c.name}"></td>
-                    <td th:text="${c.email}"></td>
+                    <td>
+                        <img th:src="@{'/img/'+${c.image}}" alt=""  src="" class="my-profile-pic">
+                        <span th:text="${c.name}"></span>
+                    </td>
+                    <td>
+                        <a href="" th:href="@{'/user/'+${c.cId}+'/contact'}">
+                            <span th:text="${c.email}"></span>
+                        </a>
+                    </td>
                     <td th:text="${c.phone}"></td>
                     <td>
                         <button class="btn btn-dark btn-sm m-1">Update</button>
@@ -32,9 +45,11 @@
                 </tr>
                 </tbody>
             </table>
-            <nav aria-label="Page navigation example">
+            <nav th:if="${totalPages!=0}" aria-label="Page navigation example">
                 <ul class="pagination">
-                    <li th:classappend="${currentPage==0?'disabled':''}" class="page-item"><a class="page-link" th:href="@{'/user/show-contacts/'+${currentPage-1}}">Previous</a></li>
+                    <li th:classappend="${currentPage==0?'disabled':''}" class="page-item"><a class="page-link"
+                                                                                              th:href="@{'/user/show-contacts/'+${currentPage-1}}">Previous</a>
+                    </li>
                     <li th:classappend="${currentPage==i-1?'active':''}"
                         th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item"><a class="page-link"
                                                                                               th:href="@{'/user/show-contacts/'+${i-1}}"><span
