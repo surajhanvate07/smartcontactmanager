@@ -8,12 +8,12 @@ import com.smart.helper.Message;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -91,18 +91,21 @@ public class UserController {
         return "normal/add-contact-form";
     }
 
-    @RequestMapping(value = "/show-contacts", method = RequestMethod.GET)
-    public String showContacts(Model model, Principal principal) {
-
+    @RequestMapping(value = "/show-contacts/{page}", method = RequestMethod.GET)
+    public String showContacts(@PathVariable("page") Integer page, Model model, Principal principal) {
         String userName = principal.getName();
         User loggedUser = userRepository.getUserByUserName(userName);
 
-        List<Contact> contactList = contactRepository.findContactsByUser(loggedUser.getId());
+        //Contact Page - page
+        //Contact per Page - 5
+        Pageable pageable = PageRequest.of(page, 5);
 
-        System.out.println(contactList);
+        Page<Contact> contactList = contactRepository.findContactsByUser(loggedUser.getId(), pageable);
 
-        model.addAttribute("contacts", contactList);
         model.addAttribute("title", "Show User Contacts");
+        model.addAttribute("contacts", contactList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", contactList.getTotalPages());
 
         return "normal/show-contacts";
     }

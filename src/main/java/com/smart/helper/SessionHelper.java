@@ -9,7 +9,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 public class SessionHelper {
 
-    public void removeVerificationMessageFromSession() {
+    public void removeMessageFromSession() {
         try {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             HttpSession session = request.getSession();
