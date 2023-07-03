@@ -59,6 +59,7 @@
     <div th:if="${session.message}" class="container">
         <div th:classappend="${session.message.type}" class="alert text-center" role="alert">
             <span th:text="${session.message.content}"></span>
+            <th:block th:text="${@sessionHelper.removeVerificationMessageFromSession()}"></th:block>
         </div>
     </div>
     <div th:replace="${content}"></div>
