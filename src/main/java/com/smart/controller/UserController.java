@@ -130,4 +130,16 @@ public class UserController {
 
         return "normal/contact-detail";
     }
+
+    @RequestMapping(value = "/delete/{cId}", method = RequestMethod.GET)
+    public String deleteContact(@PathVariable("cId") Integer cId, HttpSession session) {
+        Contact contact = contactRepository.findById(cId).get();
+        contact.setUser(null);
+
+        contactRepository.delete(contact);
+
+        session.setAttribute("message", new Message("Contact deleted successfully..!", "alert-success"));
+
+        return "redirect:/user/show-contacts/0";
+    }
 }

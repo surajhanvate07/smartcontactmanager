@@ -13,7 +13,9 @@
                 <h3 class="text-secondary">
                     You don't have any contacts added..!
                 </h3>
-                <a th:href="@{/user/add-contact}"><button class="btn btn-info m-4">Add Contact Now</button></a>
+                <a th:href="@{/user/add-contact}">
+                    <button class="btn btn-info m-4">Add Contact Now</button>
+                </a>
             </div>
             <table th:if="${totalPages!=0}" class="table">
                 <thead>
@@ -29,7 +31,7 @@
                 <tr th:each="c : ${contacts}">
                     <th scope="row" th:text="'SCMUSER_'+${c.cId}"></th>
                     <td>
-                        <img th:src="@{'/img/'+${c.image}}" alt=""  src="" class="my-profile-pic">
+                        <img th:src="@{'/img/'+${c.image}}" alt="" src="" class="my-profile-pic">
                         <span th:text="${c.name}"></span>
                     </td>
                     <td>
@@ -39,8 +41,12 @@
                     </td>
                     <td th:text="${c.phone}"></td>
                     <td>
-                        <button class="btn btn-dark btn-sm m-1">Update</button>
-                        <button class="btn btn-danger btn-sm">Delete</button>
+                        <a th:href="@{'/user/update/'+${c.cId}}">
+                            <button class="btn btn-dark btn-sm m-1">Update</button>
+                        </a>
+                        <a href="#" th:onclick="|deleteContact(${c.cId})|">
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </a>
                     </td>
                 </tr>
                 </tbody>
