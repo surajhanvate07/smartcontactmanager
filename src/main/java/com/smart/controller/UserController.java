@@ -1,5 +1,6 @@
 package com.smart.controller;
 
+import com.smart.dao.ContactRepository;
 import com.smart.dao.UserRepository;
 import com.smart.entities.Contact;
 import com.smart.entities.User;
@@ -21,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -28,6 +30,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ContactRepository contactRepository;
 
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
@@ -84,5 +89,21 @@ public class UserController {
             session.setAttribute("message", new Message("Something went wrong, Try again", "alert-danger"));
         }
         return "normal/add-contact-form";
+    }
+
+    @RequestMapping(value = "/show-contacts", method = RequestMethod.GET)
+    public String showContacts(Model model, Principal principal) {
+
+        String userName = principal.getName();
+        User loggedUser = userRepository.getUserByUserName(userName);
+
+        List<Contact> contactList = contactRepository.findContactsByUser(loggedUser.getId());
+
+        System.out.println(contactList);
+
+        model.addAttribute("contacts", contactList);
+        model.addAttribute("title", "Show User Contacts");
+
+        return "normal/show-contacts";
     }
 }
