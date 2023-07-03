@@ -123,9 +123,8 @@ public class UserController {
         if (user.getId() == contact.getUser().getId()) {
             model.addAttribute("contact", contact);
             model.addAttribute("title", contact.getName());
-        }
-        else {
-        model.addAttribute("title", "Contact Detail");
+        } else {
+            model.addAttribute("title", "Contact Detail");
         }
 
         return "normal/contact-detail";
@@ -150,5 +149,39 @@ public class UserController {
         model.addAttribute("title", "Update Contact");
         model.addAttribute("contact", contact);
         return "normal/update-contact";
+    }
+
+    @RequestMapping(value = "/process-update", method = RequestMethod.POST)
+    public String updateContactHandler(@ModelAttribute("contact") Contact contact, @RequestParam("profileImage") MultipartFile file, Model model, HttpSession session, Principal principal) {
+        try {
+            //Getting the old contact
+            Contact oldContactDetail = contactRepository.findById(contact.getcId()).get();
+            if (!file.isEmpty()) {
+                //delete the old image
+                File deleteFile = new ClassPathResource("static/img").getFile();
+                File dFile = new File(deleteFile, oldContactDetail.getImage());
+                dFile.delete();
+
+                // update the new image
+                File uploadFile = new ClassPathResource("static/img").getFile();
+
+                Path path = Paths.get(uploadFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                contact.setImage(file.getOriginalFilename());
+            } else {
+                contact.setImage(oldContactDetail.getImage());
+            }
+            String userName = principal.getName();
+            User user = userRepository.getUserByUserName(userName);
+            contact.setUser(user);
+            contactRepository.save(contact);
+            session.setAttribute("message", new Message("Contact Updated Successfully..!", "alert-success"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("message", new Message("Oops, Something went wrong!", "alert-danger"));
+        }
+
+        return "redirect:/user/"+contact.getcId()+"/contact";
     }
 }
