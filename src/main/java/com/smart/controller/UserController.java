@@ -1,10 +1,10 @@
 package com.smart.controller;
 
-import com.smart.dao.ContactRepository;
-import com.smart.dao.UserRepository;
 import com.smart.entities.Contact;
 import com.smart.entities.User;
 import com.smart.helper.Message;
+import com.smart.service.ContactService;
+import com.smart.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -30,16 +29,16 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    private ContactRepository contactRepository;
+    private ContactService contactService;
 
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
         String userName = principal.getName();
 
-        User user = userRepository.getUserByUserName(userName);
+        User user = userService.getUserByUserName(userName);
 
         model.addAttribute("user", user);
     }
@@ -63,7 +62,7 @@ public class UserController {
         try {
             String name = principal.getName();
 
-            User loggedUser = userRepository.getUserByUserName(name);
+            User loggedUser = userService.getUserByUserName(name);
 
             // Processing and uploading file...
             if (file.isEmpty()) {
@@ -81,9 +80,8 @@ public class UserController {
             contact.setUser(loggedUser);
             loggedUser.getContacts().add(contact);
 
-            userRepository.save(loggedUser);
+            userService.addUser(loggedUser);
 
-//            System.out.println("CONTACT :" + contact);
             session.setAttribute("message", new Message("Your contact is added..!", "alert-success"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,13 +93,13 @@ public class UserController {
     @RequestMapping(value = "/show-contacts/{page}", method = RequestMethod.GET)
     public String showContacts(@PathVariable("page") Integer page, Model model, Principal principal) {
         String userName = principal.getName();
-        User loggedUser = userRepository.getUserByUserName(userName);
+        User loggedUser = userService.getUserByUserName(userName);
 
         //Contact Page - page
         //Contact per Page - 5
         Pageable pageable = PageRequest.of(page, 5);
 
-        Page<Contact> contactList = contactRepository.findContactsByUser(loggedUser.getId(), pageable);
+        Page<Contact> contactList = contactService.findContactsByUser(loggedUser.getId(), pageable);
 
         model.addAttribute("title", "Show User Contacts");
         model.addAttribute("contacts", contactList);
@@ -114,11 +112,11 @@ public class UserController {
     @RequestMapping(value = "/{cId}/contact", method = RequestMethod.GET)
     public String showContactDetail(@PathVariable("cId") Integer cId, Model model, Principal principal) {
 
-        Optional<Contact> optionalContact = contactRepository.findById(cId);
+        Optional<Contact> optionalContact = contactService.getContactById(cId);
         Contact contact = optionalContact.get();
 
         String userName = principal.getName();
-        User user = userRepository.getUserByUserName(userName);
+        User user = userService.getUserByUserName(userName);
 
         if (user.getId() == contact.getUser().getId()) {
             model.addAttribute("contact", contact);
@@ -132,10 +130,9 @@ public class UserController {
 
     @RequestMapping(value = "/delete/{cId}", method = RequestMethod.GET)
     public String deleteContact(@PathVariable("cId") Integer cId, HttpSession session) {
-        Contact contact = contactRepository.findById(cId).get();
-        contact.setUser(null);
+        Contact contact = contactService.getContactById(cId).get();
 
-        contactRepository.delete(contact);
+        contactService.deleteContact(contact);
 
         session.setAttribute("message", new Message("Contact deleted successfully..!", "alert-success"));
 
@@ -144,7 +141,7 @@ public class UserController {
 
     @RequestMapping(value = "/update-contact/{cId}", method = RequestMethod.POST)
     public String updateContact(@PathVariable("cId") Integer cId, Model model) {
-        Contact contact = contactRepository.findById(cId).get();
+        Contact contact = contactService.getContactById(cId).get();
 
         model.addAttribute("title", "Update Contact");
         model.addAttribute("contact", contact);
@@ -155,7 +152,8 @@ public class UserController {
     public String updateContactHandler(@ModelAttribute("contact") Contact contact, @RequestParam("profileImage") MultipartFile file, Model model, HttpSession session, Principal principal) {
         try {
             //Getting the old contact
-            Contact oldContactDetail = contactRepository.findById(contact.getcId()).get();
+            Contact oldContactDetail = contactService.getContactById(contact.getcId()).get();
+
             if (!file.isEmpty()) {
                 //delete the old image
                 File deleteFile = new ClassPathResource("static/img").getFile();
@@ -173,9 +171,10 @@ public class UserController {
                 contact.setImage(oldContactDetail.getImage());
             }
             String userName = principal.getName();
-            User user = userRepository.getUserByUserName(userName);
+            User user = userService.getUserByUserName(userName);
             contact.setUser(user);
-            contactRepository.save(contact);
+
+            contactService.saveContact(contact);
             session.setAttribute("message", new Message("Contact Updated Successfully..!", "alert-success"));
         } catch (Exception e) {
             e.printStackTrace();

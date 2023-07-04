@@ -1,8 +1,8 @@
 package com.smart.controller;
 
-import com.smart.dao.UserRepository;
 import com.smart.entities.User;
 import com.smart.helper.Message;
+import com.smart.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class HomeController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Model model) {
@@ -61,10 +61,7 @@ public class HomeController {
             user.setImageUrl("default.png");
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
-            System.out.println("Terms and Conditions " + terms);
-            System.out.println("USER " + user);
-
-            User savedUser = userRepository.save(user);
+            User savedUser = userService.addUser(user);
 
             model.addAttribute("user", new User());
 
