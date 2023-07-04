@@ -11,6 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,9 @@ public class UserController {
 
     @Autowired
     private ContactService contactService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
@@ -181,7 +185,7 @@ public class UserController {
             session.setAttribute("message", new Message("Oops, Something went wrong!", "alert-danger"));
         }
 
-        return "redirect:/user/"+contact.getcId()+"/contact";
+        return "redirect:/user/" + contact.getcId() + "/contact";
     }
 
     @RequestMapping(value = "/show-profile/{id}", method = RequestMethod.GET)
@@ -190,5 +194,29 @@ public class UserController {
         model.addAttribute("user", loggedUser);
         model.addAttribute("title", "User Profile Page");
         return "normal/show-profile";
+    }
+
+    @RequestMapping(value = "/settings", method = RequestMethod.GET)
+    public String showSettings(Model model) {
+        model.addAttribute("title", "User Settings");
+        return "normal/settings";
+    }
+
+    @RequestMapping(value = "/change-password", method = RequestMethod.POST)
+    public String changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword, Principal principal, HttpSession session) {
+        User loggedUser = userService.getUserByUserName(principal.getName());
+
+        if(bCryptPasswordEncoder.matches(oldPassword, loggedUser.getPassword())) {
+            loggedUser.setPassword(bCryptPasswordEncoder.encode(newPassword));
+
+            userService.saveUser(loggedUser);
+
+            session.setAttribute("message", new Message("Password Changed Successfully.!!","alert-success"));
+            return "redirect:/user/dashboard";
+        }
+        else {
+            session.setAttribute("message", new Message("Old Password doesn't matches, Please try again.!!","alert-danger"));
+            return "redirect:/user/settings";
+        }
     }
 }

@@ -10,4 +10,6 @@ public interface UserService {
     public User addUser(User user);
 
     public Optional<User> getUserById(int id);
+
+    public void saveUser(User user);
 }

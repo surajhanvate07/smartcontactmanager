@@ -55,6 +55,12 @@
     <div th:unless="${contact}">
         <h2>OOPS..!, You don't have permission to this contact</h2>
     </div>
+    <script>
+        $(document).ready(() => {
+            $(".item").removeClass("active");
+            $("#view-link").addClass("active");
+        });
+    </script>
 </section>
 </body>
 </html>

@@ -28,4 +28,9 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getUserById(int id) {
         return userRepository.findById(id);
     }
+
+    @Override
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
 }
