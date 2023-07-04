@@ -59,10 +59,8 @@ body {
     color : #000000;
 }
 .sidebar a:hover {
-    background : #10ac9d;
-    width : 80%;
-    margin : 0% 10%;
-    color : white;
+    background : #75898e6b;
+    color : black;
 }
 .sidebar .divider {
     height : 0.5px;
@@ -101,4 +99,8 @@ body {
     display : none;
     width : 100%;
     padding : 10px;
+}
+.active {
+	background : #10ac9d!important;
+	color : white!important;
 }
