@@ -17,6 +17,11 @@
                     <button class="btn btn-info m-4">Add Contact Now</button>
                 </a>
             </div>
+            <div class="search-container my-4">
+                <input onkeyup="search()" id="search-input" type="text" class="form-control" placeholder="Search your contacts">
+                <div class="search-result border border-secondary">
+                </div>
+            </div>
             <table th:if="${totalPages!=0}" class="table">
                 <thead>
                 <tr>

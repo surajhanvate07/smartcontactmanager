@@ -92,3 +92,13 @@ body {
     border-radius: 50%;
     object-fit : cover;
 }
+.search-container {
+    position : relative;
+}
+.search-result {
+    position : absolute;
+    background : white;
+    display : none;
+    width : 100%;
+    padding : 10px;
+}
