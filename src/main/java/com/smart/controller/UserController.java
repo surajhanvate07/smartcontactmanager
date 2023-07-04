@@ -183,4 +183,12 @@ public class UserController {
 
         return "redirect:/user/"+contact.getcId()+"/contact";
     }
+
+    @RequestMapping(value = "/show-profile/{id}", method = RequestMethod.GET)
+    public String showProfile(@PathVariable("id") int id, Model model) {
+        User loggedUser = userService.getUserById(id).get();
+        model.addAttribute("user", loggedUser);
+        model.addAttribute("title", "User Profile Page");
+        return "normal/show-profile";
+    }
 }
