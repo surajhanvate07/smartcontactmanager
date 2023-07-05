@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base::layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title>Reset Password</title>
+</head>
+<body>
+<section>
+    <div class="my-login-page container">
+        <div class="row justify-content-md-center h-100">
+            <div class="card-wrapper">
+                <div class="card fat">
+                    <div class="card-body">
+                        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                            <strong>OTP Sent</strong> Successfully.!!
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="brand text-center">
+                            <img th:src="@{'/img/otp.png'}" alt="logo">
+                        </div>
+                        <h2 class="card-title text-center mb-4 mt-4">OTP Verification</h2>
+                        <div class="text-center">
+                            <h5 th:text="'Code has been sent to '+${user.email}"></h5>
+                        </div>
+                        <div id="otp" class="inputs d-flex flex-row justify-content-center mb-2 otp">
+                            <input class="m-2 text-center form-control rounded" type="text" id="first" maxlength="1"/>
+                            <input class="m-2 text-center form-control rounded" type="text" id="second" maxlength="1"/>
+                            <input class="m-2 text-center form-control rounded" type="text" id="third" maxlength="1"/>
+                            <input class="m-2 text-center form-control rounded" type="text" id="fourth" maxlength="1"/>
+                        </div>
+                        <form method="post" th:action="@{/authorized-otp}">
+                            <div class="form-group m-0 pl-3 pr-3 pt-3">
+                                <button type="submit" class="btn btn-primary btn-block font-weight-bold">
+                                    Verify OTP
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function (event) {
+      function OTPInput() {
+        const inputs = document.querySelectorAll("#otp > *[id]");
+        for (let i = 0; i < inputs.length; i++) {
+          inputs[i].addEventListener("keydown", function (event) {
+            if (event.key === "Backspace") {
+              inputs[i].value = "";
+              if (i !== 0) inputs[i - 1].focus();
+            } else {
+              if (i === inputs.length - 1 && inputs[i].value !== "") {
+                return true;
+              } else if (event.keyCode > 47 && event.keyCode < 58) {
+                inputs[i].value = event.key;
+                if (i !== inputs.length - 1) inputs[i + 1].focus();
+                event.preventDefault();
+              } else if (event.keyCode > 64 && event.keyCode < 91) {
+                inputs[i].value = String.fromCharCode(event.keyCode);
+                if (i !== inputs.length - 1) inputs[i + 1].focus();
+                event.preventDefault();
+              }
+            }
+          });
+        }
+      }
+      OTPInput();
+    });
+    </script>
+</section>
+</body>
+</html>
