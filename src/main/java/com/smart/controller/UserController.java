@@ -50,7 +50,7 @@ public class UserController {
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public String userDashboard(Model model, HttpSession session) {
         model.addAttribute("title", "User's Dashboard");
-        session.setAttribute("message", new Message("Logged in Successfully", "alert-success"));
+//        session.setAttribute("message", new Message("Logged in Successfully", "alert-success"));
         return "normal/user_dashboard";
     }
 

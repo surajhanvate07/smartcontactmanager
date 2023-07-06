@@ -40,19 +40,7 @@
     </div>
 </nav>
 <!--Navbar End-->
-<div>
-    <div th:if="${session.message}" class="container">
-        <div th:classappend="${session.message.type}" class="alert alert-dismissible fade show col-6 text-center alert-box"
-             role="alert">
-            <span th:text="${session.message.content}"></span>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
-        </div>
-    </div>
     <div th:replace="${content}"></div>
-</div>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

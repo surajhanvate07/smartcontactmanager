@@ -11,11 +11,13 @@
             <div class="card-wrapper">
                 <div class="card fat">
                     <div class="card-body">
-                        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                            <strong>OTP Sent</strong> Successfully.!!
+                        <div th:if="${session.message}" th:classappend="${session.message.type}"
+                             class="alert alert-dismissible fade show text-center" role="alert">
+                            <strong th:text="${session.message.content}"></strong>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
+                            <th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
                         </div>
                         <div class="brand text-center">
                             <img th:src="@{'/img/otp.png'}" alt="logo">
@@ -24,13 +26,17 @@
                         <div class="text-center">
                             <h5 th:text="'Code has been sent to '+${user.email}"></h5>
                         </div>
-                        <div id="otp" class="inputs d-flex flex-row justify-content-center mb-2 otp">
-                            <input class="m-2 text-center form-control rounded" type="text" id="first" maxlength="1"/>
-                            <input class="m-2 text-center form-control rounded" type="text" id="second" maxlength="1"/>
-                            <input class="m-2 text-center form-control rounded" type="text" id="third" maxlength="1"/>
-                            <input class="m-2 text-center form-control rounded" type="text" id="fourth" maxlength="1"/>
-                        </div>
                         <form method="post" th:action="@{/authorized-otp}">
+                            <div id="otp" class="inputs d-flex flex-row justify-content-center mb-2 otp">
+                                <input class="m-2 text-center form-control rounded" type="text" id="first" name="first"
+                                       maxlength="1"/>
+                                <input class="m-2 text-center form-control rounded" type="text" id="second"
+                                       name="second" maxlength="1"/>
+                                <input class="m-2 text-center form-control rounded" type="text" id="third" name="third"
+                                       maxlength="1"/>
+                                <input class="m-2 text-center form-control rounded" type="text" id="fourth"
+                                       name="fourth" maxlength="1"/>
+                            </div>
                             <div class="form-group m-0 pl-3 pr-3 pt-3">
                                 <button type="submit" class="btn btn-primary btn-block font-weight-bold">
                                     Verify OTP
@@ -69,6 +75,8 @@
       }
       OTPInput();
     });
+
+
     </script>
 </section>
 </body>
