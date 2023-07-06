@@ -110,7 +110,7 @@ public class ForgotController {
 
             userService.saveUser(forgotUser);
 
-            return "redirect:/signin";
+            return "redirect:/signin?change=Password Changed Successfully..!";
         } else {
             session.setAttribute("message", new Message("Password doesn't matches, Please Check.!", "alert-danger"));
             return "change-password";
