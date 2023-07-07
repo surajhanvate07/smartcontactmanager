@@ -11,6 +11,14 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
+                        <div th:if="${session.message}" th:classappend="${session.message.type}"
+                             class="alert alert-dismissible fade show text-center" role="alert">
+                            <strong th:text="${session.message.content}"></strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
+                        </div>
                         <h2 class="mb-4 text-center">Change Password</h2>
                         <form th:action="@{/user/change-password}" method="post">
                             <div class="form-group mt-4 p-3">

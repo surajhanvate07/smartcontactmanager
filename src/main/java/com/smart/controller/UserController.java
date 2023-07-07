@@ -91,8 +91,9 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("message", new Message("Something went wrong, Try again", "alert-danger"));
+            return "normal/add-contact-form";
         }
-        return "normal/add-contact-form";
+        return "redirect:/user/show-contacts/0";
     }
 
     @RequestMapping(value = "/show-contacts/{page}", method = RequestMethod.GET)

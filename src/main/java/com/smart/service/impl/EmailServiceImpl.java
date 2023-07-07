@@ -44,12 +44,9 @@ public class EmailServiceImpl implements EmailService {
 
             msg.setSubject(subject);
 
-//            msg.setText(message);
-
             msg.setContent(message, "text/html");
             Transport.send(msg);
 
-            System.out.println("Sent Success.....");
             check = true;
         } catch (MessagingException e) {
             throw new RuntimeException(e);

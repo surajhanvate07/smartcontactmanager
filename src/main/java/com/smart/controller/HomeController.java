@@ -47,7 +47,6 @@ public class HomeController {
     public String userRegister(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, @RequestParam(value = "terms", defaultValue = "false") boolean terms, HttpSession session) {
         try {
             if (!terms) {
-                System.out.println("Please agree to the Terms and Conditions!");
                 throw new Exception("Please agree to the Terms and Conditions!");
             }
 

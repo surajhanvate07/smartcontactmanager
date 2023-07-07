@@ -24,7 +24,7 @@
 <body>
 <!-- Navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-    <a class="navbar-brand font-weight-bold" th:href="@{/}">Smart Contact Manager</a>
+    <a class="navbar-brand font-weight-bold" href="#" style="pointer-events: none;">Smart Contact Manager</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -33,10 +33,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto text-uppercase font-weight-bold">
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"><span th:text="${user.name}"></span></a>
+                <a class="nav-link" th:href="'/user/show-profile/'+${user.id}"><span th:text="'Welcome, '+${user.name}"></span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/logout}">Log Out</a>
@@ -60,16 +57,6 @@
 
 <div class="content mt-5">
     <i onclick="toggleSidebar()" class="fas fa-bars m-3"></i>
-    <div th:if="${session.message}" class="container">
-        <div th:classappend="${session.message.type}" class="alert alert-dismissible fade show text-center"
-             role="alert">
-            <span th:text="${session.message.content}"></span>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
-        </div>
-    </div>
     <div th:replace="${content}"></div>
 </div>
 

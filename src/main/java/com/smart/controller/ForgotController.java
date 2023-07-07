@@ -37,8 +37,7 @@ public class ForgotController {
         User loggedUser = userService.getUserByUserName(username);
 
         if (loggedUser == null) {
-            model.addAttribute("error", "");
-            session.setAttribute("message", new Message("Email Doesn't exists, enter a correct one", "alert-danger"));
+            session.setAttribute("message", new Message("Email Doesn't exists, Enter a correct one", "alert-danger"));
             return "redirect:/forgot";
         }
 
@@ -61,7 +60,6 @@ public class ForgotController {
                 + "</div>";
 
         boolean emailFlag = emailService.sendEmail(subject, message, username);
-        System.out.println(emailFlag);
 
         if (emailFlag) {
             session.setAttribute("message", new Message("OTP Sent Successfully!", "alert-success"));
@@ -73,7 +71,7 @@ public class ForgotController {
     }
 
     @RequestMapping(value = "/authorized-otp", method = RequestMethod.POST)
-    public String changePasswordHandler(@RequestParam("first") String first, @RequestParam("second") String second, @RequestParam("third") String third, @RequestParam("fourth") int fourth, Model model, Principal principal, HttpSession session) {
+    public String changePasswordHandler(@RequestParam("first") String first, @RequestParam("second") String second, @RequestParam("third") String third, @RequestParam("fourth") int fourth, Model model, HttpSession session) {
 
         String userName = (String) session.getAttribute("email");
 
@@ -81,11 +79,8 @@ public class ForgotController {
 
         int otp = (int) session.getAttribute("otp");
         String received_otp = Integer.toString(otp);
-
-        System.out.println("Received OTP :" + received_otp);
-
         String input_otp = first + second + third + fourth;
-        System.out.println("Entered OTP :" + input_otp);
+
         boolean check_valid = input_otp.equalsIgnoreCase(received_otp);
 
         if (check_valid) {
