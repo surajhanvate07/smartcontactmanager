@@ -13,7 +13,8 @@ const search = () => {
   if(query == "") {
     $(".search-result").hide();
   } else {
-    let url = `http://localhost:8080/search/${query}`;
+    // let url = `http://localhost:8080/search/${query}`;
+     let url = `https://smartcontactmanager-production-8ac6.up.railway.app/search/${query}`;
     fetch(url)
       .then((response) => {
         return response.json();
